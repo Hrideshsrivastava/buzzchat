@@ -4,6 +4,8 @@ class CampusBuzz {
         this.currentUser = null;
         this.posts = [];
         this.currentFilter = 'all';
+        this._followers = [];
+        this._following = [];
         this.init();
     }
 
@@ -14,6 +16,7 @@ class CampusBuzz {
         }
 
         await this.loadCurrentUser();
+        await this.loadFollowCounts();
         await this.loadTheme();
         await this.loadFeed();
         this.setupEventListeners();
@@ -76,6 +79,7 @@ class CampusBuzz {
         document.getElementById('userDept').textContent = 
             `${this.currentUser.dept} • Year ${this.currentUser.year}`;
         document.getElementById('warningCount').textContent = this.currentUser.warning_count;
+        this.loadFollowCounts();
 
         if (this.currentUser.role === 'Admin') {
             document.body.classList.add('user-admin');
@@ -211,7 +215,36 @@ class CampusBuzz {
         }
 
         container.innerHTML = filteredPosts.map(post => this.createPostHTML(post)).join('');
+        this.updatePostFollowButtons();
     }
+async updatePostFollowButtons() {
+    if (!this.currentUser) return;
+
+    const userId = this.currentUser.user_id;
+
+    const following = await fetch(`/follow/following/${userId}`, {
+        headers: { "Authorization": `Bearer ${this.token}` }
+    }).then(r => r.json());
+
+    const followingList = following.following || [];
+
+    this.posts.forEach(post => {
+        const btn = document.getElementById(`follow-btn-post-${post.user_id}`);
+        if (!btn) return;
+
+        if (post.user_id === userId) {
+            btn.style.display = "none";
+            return;
+        }
+
+        const already = followingList.includes(post.user_id);
+
+        btn.textContent = already ? "Unfollow" : "Follow";
+        btn.classList.toggle("following", already);
+    });
+}
+
+
 
     createPostHTML(post) {
     const emotionClass = `emotion-${post.emotion.toLowerCase()}`;
@@ -226,6 +259,7 @@ class CampusBuzz {
                     </div>
                     <div class="user-details">
                         <h4>${post.name}</h4>
+                        <button class="post-follow-btn" onclick="app.followOrUnfollow('${post.user_id}')" id="follow-btn-post-${post.user_id}">
                         <div class="post-meta">${timeAgo}</div>
                     </div>
                 </div>
@@ -637,6 +671,98 @@ async addComment(postId) {
         console.error('Failed to add comment:', error);
     }
 }
+async loadFollowCounts() {
+    const userId = this.currentUser.user_id;
+
+    const followers = await fetch(`/follow/followers/${userId}`, {
+        headers: { "Authorization": `Bearer ${this.token}` }
+    }).then(r => r.json());
+
+    const following = await fetch(`/follow/following/${userId}`, {
+        headers: { "Authorization": `Bearer ${this.token}` }
+    }).then(r => r.json());
+
+    this._followers = followers.followers || [];
+    this._following = following.following || [];
+
+    document.getElementById("followersCount").textContent = this._followers.length;
+    document.getElementById("followingCount").textContent = this._following.length;
+}
+
+
+
+async followOrUnfollow(targetId) {
+    console.log("FOLLOW CLICKED", targetId);
+    
+    const already = this._following.includes(targetId);
+
+    if (already) {
+        // CHANGE THIS ENDPOINT
+        await fetch(`/follow/unfollow/${targetId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${this.token}`
+            }
+            // REMOVE body: JSON.stringify({ userId })
+        });
+
+        this._following = this._following.filter(id => id !== targetId);
+
+    } else {
+        // CHANGE THIS ENDPOINT  
+        await fetch(`/follow/follow/${targetId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${this.token}`
+            }
+            // REMOVE body: JSON.stringify({ userId })
+        });
+
+        this._following.push(targetId);
+    }
+
+    await this.loadFollowCounts();
+    this.updatePostFollowButtons();
+}
+
+
+
+
+
+openFollowers() {
+    const modal = document.getElementById("followModal");
+    document.getElementById("followModalTitle").textContent = "Followers";
+
+    document.getElementById("followList").innerHTML =
+        this._followers.length === 0
+        ? "<p>No followers yet</p>"
+        : this._followers.map(id => `
+            <div class="user-item">
+                <i class="fas fa-user-circle"></i> User ${id}
+            </div>
+        `).join("");
+
+    modal.style.display = "block";
+}
+
+openFollowing() {
+    const modal = document.getElementById("followModal");
+    document.getElementById("followModalTitle").textContent = "Following";
+
+    document.getElementById("followList").innerHTML =
+        this._following.length === 0
+        ? "<p>Not following anyone</p>"
+        : this._following.map(id => `
+            <div class="user-item">
+                <i class="fas fa-user-circle"></i> User ${id}
+            </div>
+        `).join("");
+
+    modal.style.display = "block";
+}
+
 
 async loadComments(postId) {
     const commentList = document.getElementById(`comment-list-${postId}`);
@@ -764,6 +890,12 @@ document.addEventListener('click', (e) => {
         app.reactToPost(postId, reactionType);
     }
 });
+document.getElementById("followersCount").parentElement.onclick = () => this.openFollowers();
+document.getElementById("followingCount").parentElement.onclick = () => this.openFollowing();
+
+// document.getElementById("followBtn").onclick = () =>
+//     this.followOrUnfollow(this.profileUserId || this.currentUser.user_id);
+
 
 // Close reaction pickers when clicking outside
 document.addEventListener('click', (e) => {
@@ -1025,4 +1157,4 @@ function goToChats() {
 
 
 // Initialize app
-const app = new CampusBuzz();
+window.app = new CampusBuzz();

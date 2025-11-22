@@ -61,6 +61,21 @@
                         </span>
                     </div>
                 </div>
+<!-- FOLLOWER SECTION -->
+<div class="follow-box">
+    <div class="follow-item" onclick="app.openFollowers()">
+        <strong id="followersCount">0</strong>
+        <span>Followers</span>
+    </div>
+    <div class="follow-item" onclick="app.openFollowing()">
+        <strong id="followingCount">0</strong>
+        <span>Following</span>
+    </div>
+</div>
+
+
+
+
             </div>
 
             <div class="sidebar-section">
@@ -228,5 +243,17 @@
         </div>
     </div>
 </div>
+<!-- FOLLOWERS / FOLLOWING POPUP -->
+<div id="followModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="followModalTitle"></h3>
+      <span class="close" onclick="document.getElementById('followModal').style.display='none'">&times;</span>
+    </div>
+    <div id="followList" class="modal-body"></div>
+  </div>
+</div>
+
+
 </body>
 </html>

@@ -1081,3 +1081,81 @@ body {
 .nav-links .nav-link:hover {
     background: rgba(255, 255, 255, 0.25) !important;
 }
+.follow-stats {
+    margin-top: 10px;
+    display: flex;
+    gap: 15px;
+    font-size: 0.95rem;
+}
+
+.follow-item {
+    cursor: pointer;
+    color: var(--secondary-color);
+}
+
+.follow-item:hover {
+    text-decoration: underline;
+}
+
+.follow-list .user-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.follow-list .user-item i {
+    font-size: 1.8rem;
+}
+.follow-box {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    background: var(--card-bg);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.follow-item {
+    cursor: pointer;
+    text-align: center;
+    width: 50%;
+}
+
+.follow-item strong {
+    font-size: 1.2rem;
+    display: block;
+}
+
+.follow-btn {
+    margin-top: 12px;
+    width: 100%;
+    padding: 10px;
+    background: var(--secondary-color);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.follow-btn.following {
+    background: #dc2626;
+}
+
+.post-follow-btn {
+    margin-left: 10px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: var(--secondary-color);
+    color: white;
+}
+
+.post-follow-btn.following {
+    background: #dc2626;
+}
