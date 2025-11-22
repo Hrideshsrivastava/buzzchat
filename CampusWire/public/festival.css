@@ -1,0 +1,219 @@
+/* =========================================
+   GLOBAL THEME VARIABLES (AUTO-UPDATED)
+========================================= */
+:root {
+  --fest-primary: #1e293b;
+  --fest-secondary: #60a5fa;
+  --fest-bg: #f5f5f5;
+  --fest-card: #ffffff;
+  --fest-sidebar-bg: #ffffff;
+  --fest-text: #111111;
+  --fest-border: rgba(0,0,0,0.15);
+  --fest-nav-start: #1e293b;
+  --fest-nav-end: #60a5fa;
+  --fest-banner-bg: none;
+  --fest-banner-overlay: rgba(0,0,0,0.25);
+}
+
+/* =========================================
+      APPLY TO WHOLE UI
+========================================= */
+
+body {
+  background: var(--fest-bg);
+  color: var(--fest-text);
+}
+
+/* Sidebars */
+.sidebar, .right-sidebar {
+  background: var(--fest-sidebar-bg);
+  border-right: 1px solid var(--fest-border);
+}
+
+/* Cards */
+.post-card,
+.create-post-card,
+.stats-card,
+.trending-card {
+  background: var(--fest-card);
+  border: 1px solid var(--fest-border);
+}
+
+/* Buttons */
+button, .sidebar-btn, .post-submit-btn {
+  background: var(--fest-primary);
+  color: #fff;
+  border: none;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* Banner */
+.theme-banner {
+  height: 220px;
+  background: var(--fest-primary);
+  background-image: var(--fest-banner-bg);
+  background-size: cover;
+  background-position: center;
+  display:flex;
+  align-items:center;
+  color:white;
+  position:relative;
+  border-bottom: 5px solid var(--fest-secondary);
+}
+
+.theme-banner::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:var(--fest-banner-overlay);
+}
+
+.banner-content {
+  position:relative;
+  padding:20px 40px;
+}
+
+.banner-emoji {
+  position:absolute;
+  right:40px;
+  top:30px;
+  font-size:70px;
+}
+
+/* Smooth transitions */
+* {
+  transition: 
+    background-color .3s ease,
+    color .3s ease,
+    border-color .3s ease,
+    background-image .35s ease;
+}
+/* ===========================
+   FIX FONT AWESOME ICONS
+=========================== */
+i.fa, i.fas, i.far, i.fab {
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    background: none !important;
+    color: inherit !important;
+}
+
+/* ===========================
+   FIX COMMENT DROPDOWN
+=========================== */
+.comments-section {
+    display: block !important;
+    background: var(--fest-card) !important;
+    padding: 10px !important;
+}
+
+.comments-section[style*="display: none"] {
+    display: none !important;
+}
+
+/* ===========================
+   FIX EMOTION FILTER TEXT
+=========================== */
+.emotion-filter,
+.emotion-filter span {
+    color: var(--fest-text) !important;
+    font-weight: 500 !important;
+}
+/* =========================================
+    AESTHETIC FESTIVAL FLOURISHES
+========================================= */
+
+/* --- Default Theme Consistency (Campus Buzz) --- */
+/* When no 'theme-' class is present on the body, use the original blue/slate border */
+body:not([class*="theme-"]) .sidebar,
+body:not([class*="theme-"]) .right-sidebar {
+    /* Uses the original var(--fest-secondary) which is #60a5fa */
+    border-right: 5px solid var(--fest-secondary); 
+}
+
+body:not([class*="theme-"]) .theme-banner {
+    /* Uses the original var(--fest-primary) which is #1e293b */
+    border-bottom: 5px solid var(--fest-secondary); 
+}
+
+/* --- 3. Holi (Rangon Ka Tyohaar!) --- */
+.theme-holi {
+    /* Subtle background texture using radial gradients for colors */
+    background-image: 
+        radial-gradient(rgba(255, 91, 119, 0.4) 10%, transparent 10%),
+        radial-gradient(rgba(255, 212, 59, 0.4) 10%, transparent 10%);
+    background-size: 60px 60px;
+    background-position: 0 0, 30px 30px;
+    background-color: var(--fest-bg);
+}
+
+/* Make buttons look like bursts of color */
+.theme-holi button, .theme-holi .sidebar-btn, .theme-holi .post-submit-btn {
+    border-radius: 20px 5px 20px 5px; 
+    box-shadow: 0 4px 0 var(--fest-secondary);
+}
+
+/* --- 8. Janmashtami (Hare Krishna) --- */
+.theme-janmashtami .post-card,
+.theme-janmashtami .create-post-card {
+    /* Card border resembling a peacock feather outline */
+    border: 3px solid var(--fest-primary); 
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(14, 165, 160, 0.4);
+}
+
+/* --- 11. Diwali (Festival of Lights) --- */
+.theme-diwali {
+    /* Darker text on a slightly warmer background for contrast */
+    --fest-text: #333333;
+}
+
+/* Glowing card effect (Diya/Lights) */
+.theme-diwali .post-card,
+.theme-diwali .create-post-card,
+.theme-diwali .stats-card,
+.theme-diwali .trending-card {
+    box-shadow: 0 0 10px rgba(255, 138, 0, 0.6), 0 0 20px rgba(255, 224, 138, 0.4);
+    border-color: var(--fest-secondary);
+}
+
+/* --- 9. Ganesh Chaturthi (Bappa Moriya!) --- */
+.theme-ganesh-chaturthi .sidebar, .theme-ganesh-chaturthi .right-sidebar {
+    /* Decorative, grand border for sidebars */
+    border-image: linear-gradient(to bottom, var(--fest-primary), var(--fest-secondary)) 1;
+    border-width: 0 5px 0 0;
+    border-style: solid;
+    border-right: none; /* Override standard border */
+}
+
+/* --- 10. Navdurga & Dussehra (Victory of Good) --- */
+.theme-dussehra .theme-banner {
+    /* Stronger shadow for drama/victory theme */
+    box-shadow: 0 10px 0 var(--fest-secondary);
+}
+
+/* Highlighted primary buttons */
+.theme-dussehra button, .theme-dussehra .sidebar-btn, .theme-dussehra .post-submit-btn {
+    background-color: var(--fest-primary);
+    border: 2px solid var(--fest-secondary);
+    font-weight: bold;
+}
+
+/* --- Makar Sankranti (Fly the Kites!) --- */
+.theme-makar-sankranti .post-card:nth-child(even) {
+    /* Alternate card colors, like kites in the sky */
+    background-color: #f8ffe8;
+}
+/* =========================================
+   APPLY TO NAVBAR
+========================================= */
+
+/* Replace '.your-navbar-class' with the actual class of your top navigation bar (e.g., .navbar, .header) */
+.navbar-top { 
+  background-color: var(--fest-primary);
+  /* Ensure text on the dark navbar remains white */
+  color: white; 
+}

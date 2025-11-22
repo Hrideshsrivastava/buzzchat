@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Buzz - Connect & Share</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="festival.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-comments"></i>
+                <span>Campus Buzz</span>
+            </div>
+            <div class="nav-links">
+                <a href="#" id="homeLink" class="nav-link active">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="#" id="profileLink" class="nav-link">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+                <a href="#" id="adminLink" class="nav-link admin-only">
+                    <i class="fas fa-cog"></i> Admin
+                </a>
+                <a href="#" id="logoutBtn" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+                <button onclick="goToChats()" class="chat-btn">Chats</button>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- Theme Banner -->
+    <div id="themeBanner" class="theme-banner">
+        <div class="banner-content">
+            <h2 id="festivalName">Welcome to Campus Buzz</h2>
+            <p id="festivalDates">Connect, Share, and Engage with your campus community</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="user-card">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-info">
+                    <h3 id="userName">User Name</h3>
+                    <p id="userDept">Department • Year</p>
+                    <div class="user-stats">
+                        <span class="stat">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span id="warningCount">0</span> warnings
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h4>Quick Actions</h4>
+                <button class="sidebar-btn" onclick="showCreatePost()">
+                    <i class="fas fa-edit"></i> Create Post
+                </button>
+                <button class="sidebar-btn" onclick="refreshFeed()">
+                    <i class="fas fa-sync-alt"></i> Refresh Feed
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <h4>Emotion Filter</h4>
+                <div class="emotion-filters">
+                    <button class="emotion-filter active" data-emotion="all">All</button>
+                    <button class="emotion-filter" data-emotion="Happy">😊 Happy</button>
+                    <button class="emotion-filter" data-emotion="Excited">🎉 Excited</button>
+                    <button class="emotion-filter" data-emotion="Neutral">😐 Neutral</button>
+                    <button class="emotion-filter" data-emotion="Sad">😢 Sad</button>
+                    <button class="emotion-filter" data-emotion="Angry">😠 Angry</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center Feed -->
+        <section class="feed">
+            <!-- Create Post Card -->
+            <div class="create-post-card">
+                <div class="post-input-container">
+                    <textarea id="postContent" placeholder="What's happening on campus? Share your thoughts..." rows="3"></textarea>
+                    <div class="post-actions">
+                        <div class="action-buttons">
+                            <label class="file-upload-btn">
+                                <i class="fas fa-image"></i>
+                                <input type="file" id="postImage" accept="image/*" hidden>
+                            </label>
+                            <select id="postEmotion" class="emotion-select">
+                                <option value="Neutral">😐 How are you feeling?</option>
+                                <option value="Happy">😊 Happy</option>
+                                <option value="Excited">🎉 Excited</option>
+                                <option value="Neutral">😐 Neutral</option>
+                                <option value="Sad">😢 Sad</option>
+                                <option value="Angry">😠 Angry</option>
+                            </select>
+                        </div>
+                        <button id="submitPost" class="post-submit-btn">
+                            <i class="fas fa-paper-plane"></i> Post
+                        </button>
+                    </div>
+                    <div id="imagePreview" class="image-preview"></div>
+                </div>
+            </div>
+
+            <!-- Feed Posts -->
+            <div id="feedPosts" class="posts-container">
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading posts...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <div class="stats-card">
+                <h4>Campus Stats</h4>
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <span>Active Users: <span id="activeUsers">0</span></span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Total Posts: <span id="totalPosts">0</span></span>
+                </div>
+            </div>
+
+            <div class="trending-card">
+                <h4>Trending Emotions</h4>
+                <div id="emotionTrends" class="trending-list">
+                    <!-- Emotion trends will be populated here -->
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Admin Dashboard</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="admin-tabs">
+                    <button class="tab-btn active" data-tab="users">Users</button>
+                    <button class="tab-btn" data-tab="posts">Flagged Posts</button>
+                    <button class="tab-btn" data-tab="themes">Themes</button>
+                </div>
+                
+                <div id="usersTab" class="tab-content active">
+                    <div class="admin-actions">
+                        <input type="text" id="userSearch" placeholder="Search users..." class="search-input">
+                        <button onclick="searchUsers()" class="search-btn">Search</button>
+                    </div>
+                    <div id="usersList" class="admin-list"></div>
+                </div>
+                
+                <div id="postsTab" class="tab-content">
+                    <div id="flaggedPostsList" class="admin-list"></div>
+                </div>
+                
+                <div id="themesTab" class="tab-content">
+                    <button onclick="showAddThemeForm()" class="add-theme-btn">Add New Theme</button>
+                    <div id="themesList" class="admin-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Theme Modal -->
+    <div id="themeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Festival Theme</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="themeForm" class="theme-form">
+                    <input type="text" name="festival_name" placeholder="Festival Name" required>
+                    <div class="form-row">
+                        <input type="date" name="start_date" placeholder="Start Date" required>
+                        <input type="date" name="end_date" placeholder="End Date" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="color" name="primary_color" value="#1e293b" required>
+                        <label>Primary Color</label>
+                        <input type="color" name="secondary_color" value="#60a5fa" required>
+                        <label>Secondary Color</label>
+                    </div>
+                    <input type="text" name="background_image" placeholder="Background Image URL">
+                    <input type="text" name="banner_image" placeholder="Banner Image URL">
+                    <button type="submit" class="submit-btn">Add Theme</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+    <script src="festival.js"></script>
+    <!-- Likes Modal -->
+<div id="likesModal" class="modal">
+    <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header">
+            <h3>Reactions</h3>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div id="likesList" class="likes-list">
+                <!-- Likes will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
